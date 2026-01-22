@@ -1,0 +1,13 @@
+{
+  "uid": "launchpad_onboarding_card",
+  "type": "card",
+  "config": {
+    "name": "Founder Onboarding Card",
+    "description": "Provides detailed information about a contact.",
+    "entrypoint": "/app/cards/get-started-app-card.tsx",
+    "location": "crm.record.tab",
+    "objectTypes": [
+      "CONTACT"
+    ]
+  }
+}

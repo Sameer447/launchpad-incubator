@@ -1,0 +1,30 @@
+{
+  "uid": "launchpad_incubator_app",
+  "type": "app",
+  "config": {
+    "description": "Tracks the current onboarding stage of a Launchpad founder in the incubator program.",
+    "name": "Launchpad Incubator App",
+    "distribution": "private",
+    "auth": {
+      "type": "static",
+      "requiredScopes": [
+        "oauth",
+        "crm.objects.contacts.read",
+        "crm.objects.contacts.write"
+      ],
+      "optionalScopes": [],
+      "conditionallyRequiredScopes": []
+    },
+    "permittedUrls": {
+      "fetch": ["https://api.hubapi.com"],
+      "iframe": [],
+      "img": []
+    },
+    "support": {
+      "supportEmail": "support@launchpad.com",
+      "documentationUrl": "https://launchpad.com/docs",
+      "supportUrl": "https://launchpad.com/support",
+      "supportPhone": "+18005555555"
+    }
+  }
+}
