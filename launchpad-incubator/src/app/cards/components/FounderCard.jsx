@@ -18,7 +18,8 @@ const FounderCard = ({ founder }) => {
   const applicationStatus = getApplicationStatus(founder.applicationStatus);
   const depositStatus = getDepositStatus(founder.depositStatus);
   const onboardingStage = getOnboardingStage(founder.onboardingStage);
-
+  console.log('founder === > ', founder);
+  
   return (
     <Box>
       <Flex direction="column" gap="md">
