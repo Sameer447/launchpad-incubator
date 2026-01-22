@@ -51,11 +51,10 @@ exports.main = async (context = {}) => {
             'lastname',
             'email',
             'phone',
-            'application_status',
             'onboarding_status',
             'payment_status',
             'next_step',
-            'current_cohort',
+            'cohort',
           ]
         );
       } catch (err) {
@@ -76,10 +75,10 @@ exports.main = async (context = {}) => {
         name: `${props.firstname || ''} ${props.lastname || ''}`.trim() || 'N/A',
         email: props.email || 'N/A',
         phone: props.phone || 'N/A',
-        applicationStatus: props.application_status || 'Applied',
+        applicationStatus: props.onboarding_status || 'Applied',
         depositStatus: props.payment_status || 'Pending',
         onboardingStage: props.onboarding_status || 'Not Started',
-        currentCohort: props.current_cohort || 'N/A',
+        currentCohort: props.cohort || 'N/A',
         nextSteps: props.next_step || 'No action required',
       };
     });
