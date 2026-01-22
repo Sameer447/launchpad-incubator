@@ -1,64 +1,70 @@
-// Simplified version - fetches data using HubSpot's built-in CRM APIs
-// No external dependencies or secrets needed
+const hubspot = require('@hubspot/api-client');
 
-exports.main = async (context = {}, sendResponse) => {
+exports.main = async (context = {}) => {
   const { hs_object_id } = context.parameters || {};
 
   try {
-    console.log('Fetching founders for company:', hs_object_id);
+    console.log('=== Serverless Function Start ===');
+    console.log('Company ID:', hs_object_id);
 
     if (!hs_object_id) {
       return {
         founders: [],
         total: 0,
-        message: 'No company ID provided',
+        error: 'No company ID provided',
       };
     }
 
-    // Use HubSpot's context to fetch associated contacts
-    // The context provides built-in methods to access CRM data
-    const contactAssociations = await context.crm.fetchAssociations(
-      'company',
+    // Get account credentials from context
+    const hubspotClient = new hubspot.Client({
+      accessToken: context.accountCredentials.accessToken || process.env.PRIVATE_APP_ACCESS_TOKEN,
+    });
+
+    console.log('Fetching associations...');
+
+    // Get all contacts associated with this company
+    const associations = await hubspotClient.crm.companies.associationsApi.getAll(
       hs_object_id,
-      'contact'
+      'contacts'
     );
 
-    console.log('Contact associations found:', contactAssociations?.length || 0);
+    console.log('Associations found:', associations.results?.length || 0);
 
-    if (!contactAssociations || contactAssociations.length === 0) {
+    if (!associations.results || associations.results.length === 0) {
       return {
         founders: [],
         total: 0,
-        message: 'No contacts associated with this company',
       };
     }
 
-    // Fetch contact details for each associated contact
-    const contactPromises = contactAssociations.map(async (assoc) => {
+    // Get contact IDs
+    const contactIds = associations.results.map(assoc => assoc.id);
+    console.log('Contact IDs:', contactIds);
+
+    // Fetch contact details in batch
+    const contactPromises = contactIds.map(async (contactId) => {
       try {
-        const contact = await context.crm.fetchCrmObjectProperties(
-          'contact',
-          assoc.id,
+        return await hubspotClient.crm.contacts.basicApi.getById(
+          contactId,
           [
             'firstname',
             'lastname',
             'email',
             'phone',
+            'application_status',
             'onboarding_status',
             'payment_status',
             'next_step',
-            'cohort',
+            'current_cohort',
           ]
         );
-        return contact;
       } catch (err) {
-        console.error('Error fetching contact:', assoc.id, err);
+        console.error('Error fetching contact', contactId, err.message);
         return null;
       }
     });
 
     const contacts = (await Promise.all(contactPromises)).filter(c => c !== null);
-
     console.log('Contacts fetched:', contacts.length);
 
     // Transform to founder card format
@@ -66,33 +72,34 @@ exports.main = async (context = {}, sendResponse) => {
       const props = contact.properties || {};
       
       return {
-        id: contact.id || contact.hs_object_id,
+        id: contact.id,
         name: `${props.firstname || ''} ${props.lastname || ''}`.trim() || 'N/A',
         email: props.email || 'N/A',
         phone: props.phone || 'N/A',
-        applicationStatus: props.onboarding_status || 'Applied',
+        applicationStatus: props.application_status || 'Applied',
         depositStatus: props.payment_status || 'Pending',
         onboardingStage: props.onboarding_status || 'Not Started',
-        currentCohort: props.cohort || 'N/A',
+        currentCohort: props.current_cohort || 'N/A',
         nextSteps: props.next_step || 'No action required',
       };
     });
 
-    console.log('Returning founders:', founders);
+    console.log('=== Returning founders:', founders.length, '===');
 
     return {
       founders,
       total: founders.length,
-      status: 'success',
     };
 
   } catch (error) {
-    console.error('Error in serverless function:', error);
+    console.error('=== Serverless Function Error ===');
+    console.error('Error:', error.message);
+    console.error('Stack:', error.stack);
+    
     return {
       founders: [],
       total: 0,
-      error: error.message,
-      status: 'error',
+      error: error.message || 'Failed to load founder data',
     };
   }
 };
