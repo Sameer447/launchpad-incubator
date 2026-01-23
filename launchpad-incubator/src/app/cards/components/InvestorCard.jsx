@@ -22,24 +22,24 @@ const InvestorCard = ({ investor }) => {
 
         {/* Investment Information */}
         <Flex direction="column" gap="sm">
-          {investor.investorFocus && (
+          {investor.investmentFocus && (
             <Flex direction="row" justify="between" align="center">
               <Text format={{ fontWeight: 'medium' }}>Investment Focus</Text>
-              <Text>{investor.investorFocus}</Text>
+              <Text>{investor.investmentFocus}</Text>
             </Flex>
           )}
 
-          {investor.investorStage && (
+          {investor.investmentStage && (
             <Flex direction="row" justify="between" align="center">
               <Text format={{ fontWeight: 'medium' }}>Investment Stage</Text>
-              <Text>{investor.investorStage}</Text>
+              <Text>{investor.investmentStage}</Text>
             </Flex>
           )}
 
-          {investor.investorTicketSize && (
+          {investor.ticketSize && (
             <Flex direction="row" justify="between" align="center">
               <Text format={{ fontWeight: 'medium' }}>Ticket Size</Text>
-              <Text>{investor.investorTicketSize}</Text>
+              <Text>{investor.ticketSize}</Text>
             </Flex>
           )}
         </Flex>

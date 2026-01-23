@@ -22,30 +22,30 @@ const MentorCard = ({ mentor }) => {
 
         {/* Mentoring Information */}
         <Flex direction="column" gap="sm">
-          {mentor.mentorExpertise && (
+          {mentor.expertise && (
             <Flex direction="column" gap="xs">
               <Text format={{ fontWeight: 'medium' }}>Expertise Areas</Text>
-              <Text variant="microcopy">{mentor.mentorExpertise}</Text>
+              <Text variant="microcopy">{mentor.expertise}</Text>
             </Flex>
           )}
 
-          {mentor.mentorAvailability && (
+          {mentor.availability && (
             <Flex direction="row" justify="between" align="center">
               <Text format={{ fontWeight: 'medium' }}>Availability</Text>
               <StatusBadge
-                status={mentor.mentorAvailability}
+                status={mentor.availability}
                 variant={
-                  mentor.mentorAvailability?.toLowerCase() === 'available' ? 'success' :
-                  mentor.mentorAvailability?.toLowerCase() === 'limited' ? 'warning' : 'error'
+                  mentor.availability?.toLowerCase() === 'available' ? 'success' :
+                  mentor.availability?.toLowerCase() === 'limited' ? 'warning' : 'error'
                 }
               />
             </Flex>
           )}
 
-          {mentor.mentorSessionsCompleted && (
+          {mentor.sessionsCompleted && (
             <Flex direction="row" justify="between" align="center">
               <Text format={{ fontWeight: 'medium' }}>Sessions Completed</Text>
-              <Text>{mentor.mentorSessionsCompleted}</Text>
+              <Text>{mentor.sessionsCompleted}</Text>
             </Flex>
           )}
         </Flex>

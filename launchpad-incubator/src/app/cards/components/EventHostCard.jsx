@@ -36,10 +36,10 @@ const EventHostCard = ({ eventHost }) => {
 
         {/* Event Hosting Information */}
         <Flex direction="column" gap="sm">
-          {eventHost.eventHostOrganizationType && (
+          {eventHost.organizationType && (
             <Flex direction="row" justify="between" align="center">
               <Text format={{ fontWeight: 'medium' }}>Organization Type</Text>
-              <Text>{eventHost.eventHostOrganizationType}</Text>
+              <Text>{eventHost.organizationType}</Text>
             </Flex>
           )}
 
