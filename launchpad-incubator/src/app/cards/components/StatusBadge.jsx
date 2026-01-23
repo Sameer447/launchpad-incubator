@@ -8,7 +8,7 @@ import { Tag } from '@hubspot/ui-extensions';
 const StatusBadge = ({ status, variant = 'default' }) => {
   return (
     <Tag variant={variant}>
-      {status.label}
+      {typeof status === 'object' && status.label ? status.label : status}
     </Tag>
   );
 };
