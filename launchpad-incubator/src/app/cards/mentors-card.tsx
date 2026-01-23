@@ -8,8 +8,12 @@ import {
     Divider,
     Button,
     hubspot,
-    Link,
 } from '@hubspot/ui-extensions';
+import MentorCard from './components/MentorCard';
+
+const CARD_TITLE = 'Mentors';
+const EMPTY_STATE_MESSAGE = 'No mentors found for this company.';
+const ERROR_MESSAGE = 'Unable to load mentor information. Please try again.';
 
 // Define the CRM card
 hubspot.extend<'crm.record.tab'>(({ context, actions }) => (
@@ -21,9 +25,9 @@ interface Mentor {
     name: string;
     email: string;
     phone: string;
-    expertise: string;
-    availability: string;
-    sessionsCompleted: string;
+    mentorExpertise: string;
+    mentorAvailability: string;
+    mentorSessionsCompleted: string;
 }
 
 const MentorsCardExtension = ({ context, actions }: any) => {
@@ -115,7 +119,7 @@ const MentorsCardExtension = ({ context, actions }: any) => {
         <Flex direction="column" gap="lg">
             <Flex direction="row" justify="between" align="center">
                 <Text format={{ fontWeight: 'bold', fontSize: 'large' }}>
-                    Mentors ({mentors.length})
+                    {CARD_TITLE} ({mentors.length})
                 </Text>
                 <Button onClick={fetchMentors} variant="secondary" size="xs">
                     Refresh
@@ -126,39 +130,7 @@ const MentorsCardExtension = ({ context, actions }: any) => {
 
             {mentors.map((mentor, index) => (
                 <React.Fragment key={mentor.id}>
-                    <Flex direction="column" gap="sm">
-                        <Text format={{ fontWeight: 'bold' }}>{mentor.name}</Text>
-                        <Flex direction="column" gap="xs">
-                            <Flex direction="row" gap="xs">
-                                <Text variant="microcopy">Email:</Text>
-                                <Link href={`mailto:${mentor.email}`}>{mentor.email}</Link>
-                            </Flex>
-                            {mentor.phone && mentor.phone !== 'N/A' && (
-                                <Flex direction="row" gap="xs">
-                                    <Text variant="microcopy">Phone:</Text>
-                                    <Text>{mentor.phone}</Text>
-                                </Flex>
-                            )}
-                            {mentor.expertise && mentor.expertise !== 'N/A' && (
-                                <Flex direction="row" gap="xs">
-                                    <Text variant="microcopy">Expertise:</Text>
-                                    <Text>{mentor.expertise}</Text>
-                                </Flex>
-                            )}
-                            {mentor.availability && mentor.availability !== 'N/A' && (
-                                <Flex direction="row" gap="xs">
-                                    <Text variant="microcopy">Availability:</Text>
-                                    <Text>{mentor.availability}</Text>
-                                </Flex>
-                            )}
-                            {mentor.sessionsCompleted && mentor.sessionsCompleted !== 'N/A' && (
-                                <Flex direction="row" gap="xs">
-                                    <Text variant="microcopy">Sessions Completed:</Text>
-                                    <Text>{mentor.sessionsCompleted}</Text>
-                                </Flex>
-                            )}
-                        </Flex>
-                    </Flex>
+                    <MentorCard mentor={mentor} />
                     {index < mentors.length - 1 && <Divider distance="md" />}
                 </React.Fragment>
             ))}

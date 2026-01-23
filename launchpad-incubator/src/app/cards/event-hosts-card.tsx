@@ -8,8 +8,12 @@ import {
     Divider,
     Button,
     hubspot,
-    Link,
 } from '@hubspot/ui-extensions';
+import EventHostCard from './components/EventHostCard';
+
+const CARD_TITLE = 'Event Hosts';
+const EMPTY_STATE_MESSAGE = 'No event hosts found for this company.';
+const ERROR_MESSAGE = 'Unable to load event host information. Please try again.';
 
 // Define the CRM card
 hubspot.extend<'crm.record.tab'>(({ context, actions }) => (
@@ -21,7 +25,7 @@ interface EventHost {
     name: string;
     email: string;
     phone: string;
-    organizationType: string;
+    eventHostOrganizationType: string;
     eventsHosted: string;
     nextEvent: string;
 }
@@ -115,7 +119,7 @@ const EventHostsCardExtension = ({ context, actions }: any) => {
         <Flex direction="column" gap="lg">
             <Flex direction="row" justify="between" align="center">
                 <Text format={{ fontWeight: 'bold', fontSize: 'large' }}>
-                    Event Hosts ({eventHosts.length})
+                    {CARD_TITLE} ({eventHosts.length})
                 </Text>
                 <Button onClick={fetchEventHosts} variant="secondary" size="xs">
                     Refresh
@@ -126,39 +130,7 @@ const EventHostsCardExtension = ({ context, actions }: any) => {
 
             {eventHosts.map((host, index) => (
                 <React.Fragment key={host.id}>
-                    <Flex direction="column" gap="sm">
-                        <Text format={{ fontWeight: 'bold' }}>{host.name}</Text>
-                        <Flex direction="column" gap="xs">
-                            <Flex direction="row" gap="xs">
-                                <Text variant="microcopy">Email:</Text>
-                                <Link href={`mailto:${host.email}`}>{host.email}</Link>
-                            </Flex>
-                            {host.phone && host.phone !== 'N/A' && (
-                                <Flex direction="row" gap="xs">
-                                    <Text variant="microcopy">Phone:</Text>
-                                    <Text>{host.phone}</Text>
-                                </Flex>
-                            )}
-                            {host.organizationType && host.organizationType !== 'N/A' && (
-                                <Flex direction="row" gap="xs">
-                                    <Text variant="microcopy">Organization Type:</Text>
-                                    <Text>{host.organizationType}</Text>
-                                </Flex>
-                            )}
-                            {host.eventsHosted && host.eventsHosted !== 'N/A' && (
-                                <Flex direction="row" gap="xs">
-                                    <Text variant="microcopy">Events Hosted:</Text>
-                                    <Text>{host.eventsHosted}</Text>
-                                </Flex>
-                            )}
-                            {host.nextEvent && host.nextEvent !== 'N/A' && (
-                                <Flex direction="row" gap="xs">
-                                    <Text variant="microcopy">Next Event:</Text>
-                                    <Text>{host.nextEvent}</Text>
-                                </Flex>
-                            )}
-                        </Flex>
-                    </Flex>
+                    <EventHostCard eventHost={host} />
                     {index < eventHosts.length - 1 && <Divider distance="md" />}
                 </React.Fragment>
             ))}

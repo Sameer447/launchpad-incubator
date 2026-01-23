@@ -8,8 +8,12 @@ import {
     Divider,
     Button,
     hubspot,
-    Link,
 } from '@hubspot/ui-extensions';
+import InvestorCard from './components/InvestorCard';
+
+const CARD_TITLE = 'Investors';
+const EMPTY_STATE_MESSAGE = 'No investors found for this company.';
+const ERROR_MESSAGE = 'Unable to load investor information. Please try again.';
 
 // Define the CRM card
 hubspot.extend<'crm.record.tab'>(({ context, actions }) => (
@@ -21,9 +25,9 @@ interface Investor {
     name: string;
     email: string;
     phone: string;
-    investmentFocus: string;
-    investmentStage: string;
-    ticketSize: string;
+    investorFocus: string;
+    investorStage: string;
+    investorTicketSize: string;
 }
 
 const InvestorsCardExtension = ({ context, actions }: any) => {
@@ -115,7 +119,7 @@ const InvestorsCardExtension = ({ context, actions }: any) => {
         <Flex direction="column" gap="lg">
             <Flex direction="row" justify="between" align="center">
                 <Text format={{ fontWeight: 'bold', fontSize: 'large' }}>
-                    Investors ({investors.length})
+                    {CARD_TITLE} ({investors.length})
                 </Text>
                 <Button onClick={fetchInvestors} variant="secondary" size="xs">
                     Refresh
@@ -126,39 +130,7 @@ const InvestorsCardExtension = ({ context, actions }: any) => {
 
             {investors.map((investor, index) => (
                 <React.Fragment key={investor.id}>
-                    <Flex direction="column" gap="sm">
-                        <Text format={{ fontWeight: 'bold' }}>{investor.name}</Text>
-                        <Flex direction="column" gap="xs">
-                            <Flex direction="row" gap="xs">
-                                <Text variant="microcopy">Email:</Text>
-                                <Link href={`mailto:${investor.email}`}>{investor.email}</Link>
-                            </Flex>
-                            {investor.phone && investor.phone !== 'N/A' && (
-                                <Flex direction="row" gap="xs">
-                                    <Text variant="microcopy">Phone:</Text>
-                                    <Text>{investor.phone}</Text>
-                                </Flex>
-                            )}
-                            {investor.investmentFocus && investor.investmentFocus !== 'N/A' && (
-                                <Flex direction="row" gap="xs">
-                                    <Text variant="microcopy">Investment Focus:</Text>
-                                    <Text>{investor.investmentFocus}</Text>
-                                </Flex>
-                            )}
-                            {investor.investmentStage && investor.investmentStage !== 'N/A' && (
-                                <Flex direction="row" gap="xs">
-                                    <Text variant="microcopy">Investment Stage:</Text>
-                                    <Text>{investor.investmentStage}</Text>
-                                </Flex>
-                            )}
-                            {investor.ticketSize && investor.ticketSize !== 'N/A' && (
-                                <Flex direction="row" gap="xs">
-                                    <Text variant="microcopy">Ticket Size:</Text>
-                                    <Text>{investor.ticketSize}</Text>
-                                </Flex>
-                            )}
-                        </Flex>
-                    </Flex>
+                    <InvestorCard investor={investor} />
                     {index < investors.length - 1 && <Divider distance="md" />}
                 </React.Fragment>
             ))}

@@ -8,8 +8,12 @@ import {
     Divider,
     Button,
     hubspot,
-    Link,
 } from '@hubspot/ui-extensions';
+import SponsorCard from './components/SponsorCard';
+
+const CARD_TITLE = 'Sponsors';
+const EMPTY_STATE_MESSAGE = 'No sponsors found for this company.';
+const ERROR_MESSAGE = 'Unable to load sponsor information. Please try again.';
 
 // Define the CRM card
 hubspot.extend<'crm.record.tab'>(({ context, actions }) => (
@@ -115,7 +119,7 @@ const SponsorsCardExtension = ({ context, actions }: any) => {
         <Flex direction="column" gap="lg">
             <Flex direction="row" justify="between" align="center">
                 <Text format={{ fontWeight: 'bold', fontSize: 'large' }}>
-                    Sponsors ({sponsors.length})
+                    {CARD_TITLE} ({sponsors.length})
                 </Text>
                 <Button onClick={fetchSponsors} variant="secondary" size="xs">
                     Refresh
@@ -126,39 +130,7 @@ const SponsorsCardExtension = ({ context, actions }: any) => {
 
             {sponsors.map((sponsor, index) => (
                 <React.Fragment key={sponsor.id}>
-                    <Flex direction="column" gap="sm">
-                        <Text format={{ fontWeight: 'bold' }}>{sponsor.name}</Text>
-                        <Flex direction="column" gap="xs">
-                            <Flex direction="row" gap="xs">
-                                <Text variant="microcopy">Email:</Text>
-                                <Link href={`mailto:${sponsor.email}`}>{sponsor.email}</Link>
-                            </Flex>
-                            {sponsor.phone && sponsor.phone !== 'N/A' && (
-                                <Flex direction="row" gap="xs">
-                                    <Text variant="microcopy">Phone:</Text>
-                                    <Text>{sponsor.phone}</Text>
-                                </Flex>
-                            )}
-                            {sponsor.sponsorshipLevel && sponsor.sponsorshipLevel !== 'N/A' && (
-                                <Flex direction="row" gap="xs">
-                                    <Text variant="microcopy">Sponsorship Level:</Text>
-                                    <Text>{sponsor.sponsorshipLevel}</Text>
-                                </Flex>
-                            )}
-                            {sponsor.contributionAmount && sponsor.contributionAmount !== 'N/A' && (
-                                <Flex direction="row" gap="xs">
-                                    <Text variant="microcopy">Contribution Amount:</Text>
-                                    <Text>{sponsor.contributionAmount}</Text>
-                                </Flex>
-                            )}
-                            {sponsor.sponsorshipStatus && sponsor.sponsorshipStatus !== 'N/A' && (
-                                <Flex direction="row" gap="xs">
-                                    <Text variant="microcopy">Status:</Text>
-                                    <Text>{sponsor.sponsorshipStatus}</Text>
-                                </Flex>
-                            )}
-                        </Flex>
-                    </Flex>
+                    <SponsorCard sponsor={sponsor} />
                     {index < sponsors.length - 1 && <Divider distance="md" />}
                 </React.Fragment>
             ))}
