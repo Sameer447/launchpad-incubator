@@ -8,6 +8,7 @@ import {
   getApplicationStatus,
   getDepositStatus,
   getOnboardingStage,
+  getOnboardingStatus,
 } from '../utils/helpers';
 
 /**
@@ -18,8 +19,7 @@ const FounderCard = ({ founder }) => {
   const applicationStatus = getApplicationStatus(founder.applicationStatus);
   const depositStatus = getDepositStatus(founder.depositStatus);
   const onboardingStage = getOnboardingStage(founder.onboardingStage);
-  console.log('founder === > ', founder);
-  
+  const onboardingStatus = getOnboardingStatus(founder.onboardingStage);  
   return (
     <Box>
       <Flex direction="column" gap="md">
@@ -55,7 +55,7 @@ const FounderCard = ({ founder }) => {
         <Divider />
 
         {/* Onboarding Progress */}
-        <OnboardingStage stage={onboardingStage} />
+        <OnboardingStage stage={onboardingStatus} />
 
         {/* Next Steps */}
         <NextSteps nextSteps={founder.nextSteps} />

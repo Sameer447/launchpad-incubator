@@ -12,6 +12,10 @@ export const getApplicationStatus = (status) => {
   };
 };
 
+/**
+ * Get deposit status configuration by value
+ */
+
 export const getDepositStatus = (status) => {
   const normalizedStatus = status?.toUpperCase().replace(/ /g, '_');
   return DEPOSIT_STATUS[normalizedStatus] || {
@@ -20,6 +24,19 @@ export const getDepositStatus = (status) => {
     color: '#516f90',
   };
 };
+
+/**
+ * Get onboarding status
+*/
+
+export const getOnboardingStatus = (status) => {
+  const normalizedStatus = status?.toUpperCase().replace(/ /g, '_');
+  return ONBOARDING_STAGES.find(s => s.key === normalizedStatus) || {
+    key: 'NOT_STARTED',
+    label: status || 'N/A',
+    color: '#516f90',
+  };
+}
 
 /**
  * Get onboarding stage with progress percentage

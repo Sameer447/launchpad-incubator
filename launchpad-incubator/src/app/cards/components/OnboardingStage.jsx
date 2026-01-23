@@ -1,5 +1,4 @@
-import React from 'react';
-import { Flex, Text, ProgressBar } from '@hubspot/ui-extensions';
+import { Flex, Text } from '@hubspot/ui-extensions';
 
 /**
  * OnboardingStage Component
@@ -12,14 +11,17 @@ const OnboardingStage = ({ stage }) => {
         <Text format={{ fontWeight: 'medium' }}>
           Onboarding Stage
         </Text>
-        <Text variant="microcopy">
+        {/* <Text variant="microcopy">
           {stage.progress}%
-        </Text>
-      </Flex>
-      <ProgressBar value={stage.progress} variant={stage.progress === 100 ? 'success' : 'default'} />
-      <Text variant="microcopy">
+        </Text> */}
+        <Text variant="microcopy">
         {stage.label}
       </Text>
+      </Flex>
+      {/* <ProgressBar value={stage.progress} variant={stage.progress === 100 ? 'success' : 'default'} /> */}
+      {/* <Text variant="microcopy">
+        {stage.label}
+      </Text> */}
     </Flex>
   );
 };
