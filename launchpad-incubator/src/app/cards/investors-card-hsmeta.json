@@ -1,0 +1,13 @@
+{
+  "uid": "launchpad_investors_card",
+  "type": "card",
+  "config": {
+    "name": "Investors Card",
+    "description": "Displays investors associated with this company.",
+    "entrypoint": "/app/cards/investors-card.tsx",
+    "location": "crm.record.tab",
+    "objectTypes": [
+      "COMPANY"
+    ]
+  }
+}

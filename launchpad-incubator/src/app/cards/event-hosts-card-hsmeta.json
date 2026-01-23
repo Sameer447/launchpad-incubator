@@ -1,0 +1,13 @@
+{
+  "uid": "launchpad_event_hosts_card",
+  "type": "card",
+  "config": {
+    "name": "Event Hosts Card",
+    "description": "Displays event hosts associated with this company.",
+    "entrypoint": "/app/cards/event-hosts-card.tsx",
+    "location": "crm.record.tab",
+    "objectTypes": [
+      "COMPANY"
+    ]
+  }
+}

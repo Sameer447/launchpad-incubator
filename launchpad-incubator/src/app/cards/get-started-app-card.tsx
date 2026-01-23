@@ -43,26 +43,45 @@ const FounderCardExtension = ({ context, actions }: any) => {
       setLoading(true);
       setError(null);
 
-      console.log('Fetching founders for company:', context.crm.objectId);
+      console.log('Full context:', context);
+      console.log('Context CRM:', context.crm);
+      console.log('Object Type:', context.crm.objectTypeId);
+      console.log('Object ID:', context.crm.objectId);
 
-      // Use hubspot.fetch for external API calls
       const backendUrl = 'https://launchpad-incubator-backend.vercel.app';
-      const response = await hubspot.fetch(`${backendUrl}/api/founders?companyId=${context.crm.objectId}`);
+
+      // Determine if we're on a company or contact page
+      const isCompanyPage = context.crm.objectTypeId === '0-2'; // Company object type
+      const isContactPage = context.crm.objectTypeId === '0-1'; // Contact object type
+
+      let apiUrl = '';
+
+      if (isCompanyPage) {
+        console.log('On company page, fetching founders for company:', context.crm.objectId);
+        apiUrl = `${backendUrl}/api/founders?companyId=${context.crm.objectId}`;
+      } else if (isContactPage) {
+        console.log('On contact page, showing single founder:', context.crm.objectId);
+        // For contact page, we could either show just this contact or their company's founders
+        apiUrl = `${backendUrl}/api/founders`; // Or implement a contact-specific endpoint
+      } else {
+        apiUrl = `${backendUrl}/api/founders`;
+      }
+
+      console.log('Fetching from:', apiUrl);
+      const response = await hubspot.fetch(apiUrl);
 
       if (!response.ok) {
         throw new Error(`API error: ${response.status}`);
       }
-
       const result = await response.json();
-      console.log('Response data:', result);
+      console.log('API result:', result);
 
       if (result?.error) {
         throw new Error(result.error);
       }
 
-      // API response structure: { success, data: { founders: [...] } }
-      const foundersData = result?.data?.founders || result?.founders || [];
-      console.log('Founders array:', foundersData);
+      const foundersData = result?.data?.founders || [];
+      console.log('Founders data:', foundersData);
       setFounders(foundersData);
     } catch (err: any) {
       console.error('Error loading founders:', err);

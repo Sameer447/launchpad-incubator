@@ -1,0 +1,13 @@
+{
+  "uid": "launchpad_sponsors_card",
+  "type": "card",
+  "config": {
+    "name": "Sponsors Card",
+    "description": "Displays sponsors associated with this company.",
+    "entrypoint": "/app/cards/sponsors-card.tsx",
+    "location": "crm.record.tab",
+    "objectTypes": [
+      "COMPANY"
+    ]
+  }
+}
